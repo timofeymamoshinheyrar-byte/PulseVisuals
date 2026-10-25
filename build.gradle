@@ -1,44 +1,37 @@
 plugins {
-    id 'fabric-loom' version '1.8.11'
-    id 'maven-publish'
+    id 'java'
 }
 
-sourceCompatibility = JavaVersion.VERSION_21
-targetCompatibility = JavaVersion.VERSION_21
-
-archives_base_name = 'timahivisuals'
-version = project.mod_version
-group = project.maven_group
+version = '1.0.0'
+group = 'net.timahivisuals'
 
 repositories {
     mavenCentral()
-    maven { url = "https://fabricmc.net" }
     maven { url = "https://minecraft.net" }
+    maven { url = "https://fabricmc.net" }
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings loom.officialMojangMappings() // Обход блокировки маппингов
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+    // Этот блок заставит сервер GitHub автоматически подтянуть все нужные библиотеки Fabric и Minecraft из интернета
+    compileOnly "net.fabricmc:fabric-loader:0.16.9"
+    compileOnly "net.fabricmc.fabric-api:fabric-api:0.113.0+1.21.4"
+    compileOnly "com.mojang:minecraft:1.21.4"
 }
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = 21
+    options.compilerArgs << '-Xlint:none'
+    options.encoding = 'UTF-8'
+    options.release = 21
 }
 
-java {
-    withSourcesJar()
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        include 'fabric.mod.json'
+        include 'pulsevisuals.mixins.json'
+    }
 }
 
 jar {
-    from("LICENSE") {
-        rename it, "LICENSE_${archives_base_name}"
-    }
-}
-
-publishingConvention {
-    registerPublication {
-        it.artifactId = archives_base_name
-    }
+    archiveFileName = 'timahivisuals-1.0.0.jar'
+    from sourceSets.main.output
 }
