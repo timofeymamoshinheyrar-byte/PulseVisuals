@@ -6,25 +6,19 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_21
 targetCompatibility = JavaVersion.VERSION_21
 
-archives_base_name = project.archives_base_name
+archives_base_name = 'timahivisuals'
 version = project.mod_version
 group = project.maven_group
 
 repositories {
-    mavenLocal()
-    maven {
-        name = "Fabric"
-        url = "https://maven.fabricmc.net/"
-    }
-    maven {
-        name = "Mojang"
-        url = "https://libraries.minecraft.net/"
-    }
+    mavenCentral()
+    maven { url = "https://fabricmc.net" }
+    maven { url = "https://minecraft.net" }
 }
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings loom.officialMojangMappings()
+    mappings loom.officialMojangMappings() // Обход блокировки маппингов
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 }
